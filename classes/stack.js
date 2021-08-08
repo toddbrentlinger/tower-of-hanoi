@@ -127,6 +127,16 @@ export class StackWithLinkedList {
         }
     }
 
+    size() {
+        let counter = 0;
+        let currNode = this.head;
+        while (currNode !== null) {
+            ++counter;
+            currNode = currNode.next;
+        }
+        return counter;
+    }
+
     /**
      * Insert element into stack in ascending sorted way.
      * @param {StackWithLinkedList} stack
