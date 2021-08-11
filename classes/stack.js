@@ -44,7 +44,7 @@ export class StackWithLinkedList {
     /** Removes an item from the stack. The items are popped in the reversed order in which they are pushed. If the stack is empty, then it is said to be an Underflow condition. */
     pop() {
         if (this.isEmpty()) {
-            console.log("Stack is Empty");
+            //console.log("Stack is Empty");
         } else {
             const poppedData = this.head.data;
             this.head = this.head.next;
@@ -56,7 +56,7 @@ export class StackWithLinkedList {
     /** Returns top element of stack. */
     peek() {
         if (this.isEmpty()) {
-            console.log("Stack is Empty");
+            //console.log("Stack is Empty");
         } else {
             //console.log(`${this.head.data} on top of stack`);
             return this.head.data;
@@ -66,7 +66,7 @@ export class StackWithLinkedList {
     /** Print each element of stack (top-to-bottom) to console. */
     print() {
         if (this.isEmpty()) {
-            console.log("Stack is Empty");
+            //console.log("Stack is Empty");
         } else {
             let currNode = this.head;
             while (currNode !== null) {
