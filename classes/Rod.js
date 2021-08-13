@@ -37,6 +37,10 @@ class Rod {
             bottomCenterY += diskHeight;
         }
     }
+
+    isEmpty() {
+        return !this.disks.head;
+    }
 }
 
 export default Rod;

@@ -23,12 +23,21 @@
 */
 export function createElement(elementTag, elementClass, elementInnerHTML) {
     // If only first argument is provided, recommend using document.createElement instead
-    if (typeof elementClass === 'undefined' && typeof elementInnerHTML === 'undefined')
+    if (!elementClass && !elementInnerHTML)
         console.log("Use document.createElement() instead");
     let element = document.createElement(elementTag);
-    if (typeof elementClass !== 'undefined')
+    if (elementClass)
         element.setAttribute('class', elementClass);
-    if (typeof elementInnerHTML !== 'undefined')
+    if (elementInnerHTML)
         element.innerHTML = elementInnerHTML;
     return element;
+}
+
+/**
+ * 
+ * @param {String} c 
+ * @returns {Boolean}
+ */
+export function nextCharacter(c) {
+    return String.fromCharCode(c.charCodeAt(0) + 1);
 }

@@ -1,8 +1,12 @@
 "use strict";
-import Disk from "./Disk.js";
+
 import Rod from "./Rod.js";
 import { StackWithLinkedList as Stack } from "./stack.js";
-import { createElement, isEmptyObject } from "./utilities.js";
+import { createElement, nextCharacter } from "./utilities.js";
+
+/** TODO:
+ * - Use LinkedList instead of dynamic arrays with changing or unknown size  
+ */
 
 export class TowerOfHanoi {
     /**
@@ -17,45 +21,71 @@ export class TowerOfHanoi {
         this.moveHistory = new Stack(); // Stack data structure to hold history of moves
         this.rods = TowerOfHanoi.createRodsArray(nDisks, nRods);
         
-        this.fromRod = 0;
-        this.toRod = 0;
-        this.isDiskMoving = false;
+        this.fromRodInput = 0;
+        this.toRodInput = 0;
+        //this.isDiskMoving = false;
 
         // Add buttons
         const buttonContainer = document.getElementById('buttons-container');
         let temp;
         // Move - From
         temp = new Array(this.rods.length);
-        for (let i = 0; i < temp.length; i++) temp[i] = {value: i, text: i};
-        function handleSelectChange(event) {
-            switch(event.target.name) {
-                case 'moveFrom':
-                    this.fromRod = parseInt(event.target.value, 10);
-                    break;
-                case 'moveTo':
-                    this.toRod = parseInt(event.target.value, 10);
-                    break;
-                default:
-            }
-        }
-        TowerOfHanoi.createSelectElement('From Rod: ', 'move-from-select', 'moveFrom', temp, handleSelectChange.bind(this))
-            .forEach(element => buttonContainer.append(element));
+        for (let i = 0, c = 'A'; i < temp.length; i++, c = nextCharacter(c)) temp[i] = {value: i, text: c};
+        // function handleSelectChange(event) {
+        //     switch(event.target.name) {
+        //         case 'moveFrom':
+        //             this.fromRodInput = parseInt(event.target.value, 10);
+        //             break;
+        //         case 'moveTo':
+        //             this.toRodInput = parseInt(event.target.value, 10);
+        //             break;
+        //         default:
+        //     }
+        // }
+        // TowerOfHanoi.createSelectElement('From Rod: ', 'move-from-select', 'moveFrom', temp, handleSelectChange.bind(this))
+        //     .forEach(element => buttonContainer.append(element));
         // Move - To
-        TowerOfHanoi.createSelectElement('To Rod: ', 'move-to-select', 'moveTo', temp, handleSelectChange.bind(this))
-            .forEach(element => buttonContainer.append(element));
+        // TowerOfHanoi.createSelectElement('To Rod: ', 'move-to-select', 'moveTo', temp, handleSelectChange.bind(this))
+        //     .forEach(element => buttonContainer.append(element));
+        
+        // Move - From
+        function handleFromInputChange(event) {
+            if (this.fromRodInput !== event.target.value)
+                this.fromRodInput = Number.parseInt(event.target.value, 10);
+        }
+        buttonContainer.append(TowerOfHanoi.createInputField('From Rod: ', 'moveFrom', temp, handleFromInputChange.bind(this)));
+        // Move - To
+        function handleToInputChange(event) {
+            if (this.toRodInput !== event.target.value)
+                this.toRodInput = Number.parseInt(event.target.value, 10);
+        }
+        buttonContainer.append(TowerOfHanoi.createInputField('To Rod: ', 'moveTo', temp, handleToInputChange.bind(this)));
 
         // Move Button
-        temp = createElement('button', undefined, 'MOVE');
+        temp = createElement('button', undefined, 'Move');
         temp.addEventListener('click', function() {
-            // Move based on selected inputs
-            this.move(this.rods[this.fromRod], this.rods[this.toRod]);
+            this.move(this.rods[this.fromRodInput], this.rods[this.toRodInput]);
         }.bind(this));
         buttonContainer.append(temp);
 
         // Undo Button
-        temp = createElement('button', undefined, 'UNDO');
+        temp = createElement('button', undefined, 'Undo');
         temp.addEventListener('click', function() {
             this.undoMove();
+        }.bind(this));
+        buttonContainer.append(temp);
+
+        // Solve Button
+        temp = createElement('button', undefined, 'Solve');
+        temp.addEventListener('click', function() {
+            this.solve();
+        }.bind(this));
+        buttonContainer.append(temp);
+
+        // Reset Button
+        temp = createElement('button', undefined, 'Reset');
+        temp.addEventListener('click', function() {
+            this.reset();
         }.bind(this));
         buttonContainer.append(temp);
 
@@ -83,7 +113,8 @@ export class TowerOfHanoi {
     move(fromRod, toRod) {
         // Check if valid move:
         // - No disk may be placed on top of a disk that is smaller than it
-        if (!fromRod.topDisk || (toRod.topDisk && fromRod.topDisk.size > toRod.topDisk.size)) {
+        //if (!fromRod.topDisk || (toRod.topDisk && fromRod.topDisk.size > toRod.topDisk.size)) {
+        if (!TowerOfHanoi.isMoveValid(fromRod, toRod)) {
             console.error('Move NOT valid');
             return;
         }
@@ -131,6 +162,142 @@ export class TowerOfHanoi {
         this.draw();
     }
 
+    /** Returns true if Tower of Hanoi has been solved, else returns false. */
+    isPuzzleComplete() {
+        return this.rods[0].isEmpty() && this.rods[1].isEmpty();
+    }
+
+    /** Resets Tower of Hanoi to initial state where all disks are on left rod. */
+    reset() {
+        // Combine and sort each Stack intance of Disks inside each Rod
+        const firstRod = this.rods[0];
+        let tempNode;
+        for (let i = 1; i < this.rods.length; i++) {
+            tempNode = this.rods[i].disks.head;
+            while (tempNode !== null) {
+                TowerOfHanoi.sortedInsert(firstRod.disks, tempNode.data);
+                tempNode = tempNode.next;
+            }
+            this.rods[i].disks.head = null;
+        }
+        // Clear move history
+        this.moveHistory.head = null;
+
+        // Draw updated canvas
+        this.draw();
+    }
+
+    /** Solves Tower of Hanoi and makes each move. */
+    solve() {
+        // Reset so all disks are on left rod
+        this.reset();
+        // Make each move at time interval
+        this.getSolutionSimple();
+    }
+
+    getSolutionSimple() {
+        /*
+        For an even number of disks:
+
+        make the legal move between pegs A and B (in either direction),
+        make the legal move between pegs A and C (in either direction),
+        make the legal move between pegs B and C (in either direction),
+        repeat until complete.
+
+        For an odd number of disks:
+
+        make the legal move between pegs A and C (in either direction),
+        make the legal move between pegs A and B (in either direction),
+        make the legal move between pegs B and C (in either direction),
+        repeat until complete.
+
+        In each case, a total of 2n − 1 moves are made.
+         */
+        const getValidMove = function(rodA, rodB) {
+            return TowerOfHanoi.isMoveValid(rodA, rodB) ? {from: rodA, to: rodB} : {from: rodB, to: rodA};
+        }.bind(this);
+        let moves = [];
+        let nextMove;
+        let interval;
+        if (this.nDisks % 2) { // If odd number of disks
+            interval = setInterval(() => {
+                // Check win condition
+                if (this.isPuzzleComplete()) {
+                    console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
+                    clearInterval(interval);
+                    return;
+                }
+
+                switch(this.moveHistory.size() % 3) {
+                    case 0:
+                        // make the legal move between pegs A and C (in either direction)
+                        moves.push(getValidMove(this.rods[0], this.rods[2]));
+                        nextMove = getValidMove(this.rods[0], this.rods[2]);
+                        break;
+                    case 1:
+                        // make the legal move between pegs A and B (in either direction)
+                        moves.push(getValidMove(this.rods[0], this.rods[1]));
+                        nextMove = getValidMove(this.rods[0], this.rods[1]);
+                        break;
+                    case 2:
+                        // make the legal move between pegs B and C (in either direction)
+                        moves.push(getValidMove(this.rods[1], this.rods[2]));
+                        nextMove = getValidMove(this.rods[1], this.rods[2]);
+                        break;
+                    default:
+                        nextMove = null;
+                }
+                if (nextMove)
+                    this.move(nextMove.from, nextMove.to);
+
+                console.log(`Move ${this.moveHistory.size()} complete!`);
+            }, 1000);
+        } else { // Else even number of disks
+            interval = setInterval(() => {
+                // Check win condition
+                if (this.isPuzzleComplete()) {
+                    console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
+                    clearInterval(interval);
+                    return;
+                }
+
+                switch(this.moveHistory.size() % 3) {
+                    case 0:
+                        // make the legal move between pegs A and B (in either direction)
+                        moves.push(getValidMove(this.rods[0], this.rods[1]));
+                        nextMove = getValidMove(this.rods[0], this.rods[1]);
+                        break;
+                    case 1:
+                        // make the legal move between pegs A and C (in either direction)
+                        moves.push(getValidMove(this.rods[0], this.rods[2]));
+                        nextMove = getValidMove(this.rods[0], this.rods[2]);
+                        break;
+                    case 2:
+                        // make the legal move between pegs B and C (in either direction)
+                        moves.push(getValidMove(this.rods[1], this.rods[2]));
+                        nextMove = getValidMove(this.rods[1], this.rods[2]);
+                        break;
+                    default:
+                        nextMove = null;
+                }
+                if (nextMove)
+                    this.move(nextMove.from, nextMove.to);
+
+                console.log(`Move ${this.moveHistory.size()} complete!`);
+            }, 1000);
+        }
+        window.moves = moves;
+        return moves;
+    }
+
+    getSolutionIterative() {
+
+    }
+
+    getSolutionRecursive() {
+
+    }
+
     // Static Methods
 
     static init(ctx, nDisks = 4, nRods = 3) {
@@ -151,6 +318,16 @@ export class TowerOfHanoi {
         console.log('init has finished');
     }
 
+    static isMoveValid(fromRod, toRod) {
+        // NOT Valid If:
+        // - NO disk on fromRod
+        if (!fromRod.topDisk) return false;
+        // - No disk may be placed on top of a disk that is smaller than it
+        if (toRod.topDisk && fromRod.topDisk.size > toRod.topDisk.size) return false;
+        // Move is valid if reach here
+        return true;
+    }
+
     static createRodsArray(nDisks, nRods) {
         const rodsArr = new Array(nRods); // Initialize rods to empty array
         rodsArr[0] = new Rod(nDisks); // Add first rod with all disks
@@ -159,6 +336,55 @@ export class TowerOfHanoi {
             rodsArr[i] = new Rod();
         }
         return rodsArr;
+    }
+
+    static createInputField(title, name, optionsArr, handleChange, containerClass = null) {
+        /*
+        <div>
+            <p>From Rod:</p>
+            <div>
+                <input type="radio" id="moveFrom-0" name="moveFrom" value="0" checked>
+                <label for="moveFrom-0">A</label>
+            </div>
+            <div>
+                <input type="radio" id="moveFrom-1" name="moveFrom" value="1">
+                <label for="moveFrom-1">B</label>
+            </div>
+            <div>
+                <input type="radio" id="moveFrom-2" name="moveFrom" value="2">
+                <label for="moveFrom-2">C</label>
+            </div>
+        </div>
+         */
+
+        // Check if optionsArr is empty
+        if (!optionsArr.length) return;
+
+        const containerElement = document.createElement('div');
+        if (containerClass)
+            containerElement.classList.add(containerClass);
+
+        containerElement.append(createElement('p', null, title));
+
+        let tempParent;
+        let tempChild;
+        optionsArr.forEach((option, index) => {
+            tempParent = containerElement.appendChild(document.createElement('div'));
+
+            tempChild = tempParent.appendChild(document.createElement('input'));
+            tempChild.type = 'radio';
+            tempChild.id = `${name}-${option.value}`;
+            tempChild.name = name;
+            tempChild.value = option.value;
+            tempChild.addEventListener('change', handleChange);
+            if (index == 0) tempChild.checked = true;
+
+            tempChild = tempParent.appendChild(document.createElement('label'));
+            tempChild.htmlFor = `${name}-${option.value}`;
+            tempChild.innerHTML = option.text;
+        });
+
+        return containerElement;
     }
 
     static createSelectElement(labelText, id, name, optionsArr, handleChange, bReturnInContainer = false, containerClass = null) {
@@ -194,6 +420,26 @@ export class TowerOfHanoi {
         }
 
         return [labelElement, selectElement];
+    }
+
+    /**
+     * Inserts disk in rod in sorted order
+     * @param {Stack} diskStack 
+     * @param {Disk} disk 
+     */
+    static sortedInsert(diskStack, disk) {
+        if (diskStack.isEmpty() || disk.size <= diskStack.peek().size) {
+            diskStack.push(disk);
+        }
+        /* Else disk at top of stack is less than disk to insert, pop the top item
+         * and recursively call sortedInsert. */
+        else {
+            const temp = diskStack.pop();
+            TowerOfHanoi.sortedInsert(diskStack, disk);
+
+            // Push back the top item removed earlier
+            diskStack.push(temp);
+        }
     }
 }
 
