@@ -23,71 +23,52 @@ export class TowerOfHanoi {
         
         this.fromRodInput = 0;
         this.toRodInput = 0;
-        //this.isDiskMoving = false;
 
         // Add buttons
         const buttonContainer = document.getElementById('buttons-container');
-        let temp;
-        // Move - From
-        temp = new Array(this.rods.length);
+        let temp = new Array(this.rods.length);
         for (let i = 0, c = 'A'; i < temp.length; i++, c = nextCharacter(c)) temp[i] = {value: i, text: c};
-        // function handleSelectChange(event) {
-        //     switch(event.target.name) {
-        //         case 'moveFrom':
-        //             this.fromRodInput = parseInt(event.target.value, 10);
-        //             break;
-        //         case 'moveTo':
-        //             this.toRodInput = parseInt(event.target.value, 10);
-        //             break;
-        //         default:
-        //     }
-        // }
-        // TowerOfHanoi.createSelectElement('From Rod: ', 'move-from-select', 'moveFrom', temp, handleSelectChange.bind(this))
-        //     .forEach(element => buttonContainer.append(element));
-        // Move - To
-        // TowerOfHanoi.createSelectElement('To Rod: ', 'move-to-select', 'moveTo', temp, handleSelectChange.bind(this))
-        //     .forEach(element => buttonContainer.append(element));
         
         // Move - From
         function handleFromInputChange(event) {
             if (this.fromRodInput !== event.target.value)
                 this.fromRodInput = Number.parseInt(event.target.value, 10);
         }
-        buttonContainer.append(TowerOfHanoi.createInputField('From Rod: ', 'moveFrom', temp, handleFromInputChange.bind(this)));
+        buttonContainer.append(TowerOfHanoi.createInputField('From Rod: ', 'moveFrom', temp, handleFromInputChange.bind(this), 'rod-move-select'));
+        
         // Move - To
         function handleToInputChange(event) {
             if (this.toRodInput !== event.target.value)
                 this.toRodInput = Number.parseInt(event.target.value, 10);
         }
-        buttonContainer.append(TowerOfHanoi.createInputField('To Rod: ', 'moveTo', temp, handleToInputChange.bind(this)));
+        buttonContainer.append(TowerOfHanoi.createInputField('To Rod: ', 'moveTo', temp, handleToInputChange.bind(this), 'rod-move-select'));
+
+        // Button Container
+        temp = buttonContainer.appendChild(createElement('div', 'btn-container'));
 
         // Move Button
-        temp = createElement('button', undefined, 'Move');
+        temp = temp.appendChild(createElement('button', undefined, 'Move'));
         temp.addEventListener('click', function() {
             this.move(this.rods[this.fromRodInput], this.rods[this.toRodInput]);
         }.bind(this));
-        buttonContainer.append(temp);
 
         // Undo Button
-        temp = createElement('button', undefined, 'Undo');
+        temp = temp.parentElement.appendChild(createElement('button', undefined, 'Undo'));
         temp.addEventListener('click', function() {
             this.undoMove();
         }.bind(this));
-        buttonContainer.append(temp);
 
         // Solve Button
-        temp = createElement('button', undefined, 'Solve');
+        temp = temp.parentElement.appendChild(createElement('button', undefined, 'Solve'));
         temp.addEventListener('click', function() {
             this.solve();
         }.bind(this));
-        buttonContainer.append(temp);
 
         // Reset Button
-        temp = createElement('button', undefined, 'Reset');
+        temp = temp.parentElement.appendChild(createElement('button', undefined, 'Reset'));
         temp.addEventListener('click', function() {
             this.reset();
         }.bind(this));
-        buttonContainer.append(temp);
 
         // Handle canvas click event
         function handleCanvasClick(event) {
@@ -149,8 +130,7 @@ export class TowerOfHanoi {
 
         for (let i = 0, x = distBetweenRodCenters / 2; i < this.rods.length; i++, x += distBetweenRodCenters) {
             this.rods[i].draw(this.ctx, x, this.rodWidth, this.rodHeight, this.diskUnitWidth, this.diskHeight)
-            //this.rods.forEach(rod => rod.draw(this.ctx, x, this.rodWidth, this.rodHeight, this.diskUnitWidth, this.diskHeight));
-        }
+         }
     }
 
     // Handle window resize event
@@ -181,7 +161,7 @@ export class TowerOfHanoi {
             this.rods[i].disks.head = null;
         }
         // Clear move history
-        this.moveHistory.head = null;
+        this.moveHistory.clear();
 
         // Draw updated canvas
         this.draw();

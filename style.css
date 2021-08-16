@@ -14,7 +14,16 @@ header {
 
 #buttons-container {
     display: flex;
-    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+}
+
+.rod-move-select {
+    display: flex;
+}
+
+.rod-move-select > * {
+    margin: 1em 0;
 }
 
 #rules-container {

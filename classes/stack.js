@@ -76,6 +76,11 @@ export class StackWithLinkedList {
         }
     }
 
+    /** Clears stack to be empty. */
+    clear() {
+        this.head = null;
+    }
+
     /**
      * Recursive function that inserts an element at bottom of the stack.
      * @param {any} item
