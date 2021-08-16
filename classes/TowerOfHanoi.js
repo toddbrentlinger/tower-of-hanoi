@@ -24,6 +24,9 @@ export class TowerOfHanoi {
         this.fromRodInput = 0;
         this.toRodInput = 0;
 
+        this.solutionInterval = null;
+        //this.animationInterval = null;
+
         // Add buttons
         const buttonContainer = document.getElementById('buttons-container');
         let temp = new Array(this.rods.length);
@@ -149,6 +152,9 @@ export class TowerOfHanoi {
 
     /** Resets Tower of Hanoi to initial state where all disks are on left rod. */
     reset() {
+        // Clear intervals
+        clearInterval(this.solutionInterval); 
+
         // Combine and sort each Stack intance of Disks inside each Rod
         const firstRod = this.rods[0];
         let tempNode;
@@ -198,13 +204,13 @@ export class TowerOfHanoi {
         }.bind(this);
         let moves = [];
         let nextMove;
-        let interval;
+        //let interval;
         if (this.nDisks % 2) { // If odd number of disks
-            interval = setInterval(() => {
+            this.solutionInterval = setInterval(() => {
                 // Check win condition
                 if (this.isPuzzleComplete()) {
                     console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
-                    clearInterval(interval);
+                    clearInterval(this.solutionInterval);
                     return;
                 }
 
@@ -233,11 +239,11 @@ export class TowerOfHanoi {
                 console.log(`Move ${this.moveHistory.size()} complete!`);
             }, 1000);
         } else { // Else even number of disks
-            interval = setInterval(() => {
+            this.solutionInterval = setInterval(() => {
                 // Check win condition
                 if (this.isPuzzleComplete()) {
                     console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
-                    clearInterval(interval);
+                    clearInterval(this.solutionInterval);
                     return;
                 }
 

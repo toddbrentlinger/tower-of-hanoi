@@ -1,0 +1,48 @@
+Tower of Hanoi Notes:
+
+8-16-21
+
+- Add message field:
+	- Not Valid Move
+	- Puzzle Completed in N Moves!
+	- Disk Moved From Rod N to Rod N
+	- Undo Prev Move
+	- Puzzle Reset
+
+- Display each move in Move History
+	A -> B
+	A -> C
+	B -> C
+
+- Add input for the number of disks to use
+
+8-12-21
+
+- Add Solve dropdown with options to change delay between moves, 'Solve' button or 'Play', 'Stop' button (clears interval when clicked), 
+ability to step through solution move by move instead of playing automatically.
+
+X Style radio buttons and label to be horizontal instead of vertical.
+
+X Add 'Reset' button
+
+X ISSUE: If animation is playing and Reset button is pressed, animation restarts from the beginning.
+SOLUTION: Use state interval that can be cleared when reset
+
+Pre 8-12-21
+
+Class: TowerOfHanoi
+	rods = Rods[] (indices from left to right)
+	move(initialRod, finalRod) (moves disk from top of initial rod to top of final rod, checking if valid move first)
+
+Class: Rod
+	disks = Disk[] (0 index is disk at bottom of rod)
+
+Class: Disk
+
+- Rod Height should be one disk height (+ padding) less than the full canvas height. Allows minimum room to animate disk up and over to new rod.
+
+Disk Min Width - RodWidth(+pad)
+Disk Max Width - 0.3 * CanvasWidth
+
+nDisks		Widths
+3		0 - 0 - DiskMaxWidth
