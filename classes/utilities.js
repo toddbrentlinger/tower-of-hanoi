@@ -36,7 +36,7 @@ export function createElement(elementTag, elementClass, elementInnerHTML) {
 /**
  * 
  * @param {String} c 
- * @returns {Boolean}
+ * @returns {String}
  */
 export function nextCharacter(c) {
     return String.fromCharCode(c.charCodeAt(0) + 1);

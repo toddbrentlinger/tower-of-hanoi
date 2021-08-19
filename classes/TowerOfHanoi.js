@@ -27,6 +27,9 @@ export class TowerOfHanoi {
         this.solutionInterval = null;
         //this.animationInterval = null;
 
+        this.messageFieldNode = document.getElementById('message-field');
+        this.moveHistoryNode = document.getElementById('move-history');
+
         // Add buttons
         const buttonContainer = document.getElementById('buttons-container');
         let temp = new Array(this.rods.length);
@@ -99,7 +102,8 @@ export class TowerOfHanoi {
         // - No disk may be placed on top of a disk that is smaller than it
         //if (!fromRod.topDisk || (toRod.topDisk && fromRod.topDisk.size > toRod.topDisk.size)) {
         if (!TowerOfHanoi.isMoveValid(fromRod, toRod)) {
-            console.error('Move NOT valid');
+            //console.error('Move NOT valid');
+            this.printMessage('Move NOT valid');
             return;
         }
         // Move disk from fromRod to toRod
@@ -110,6 +114,12 @@ export class TowerOfHanoi {
             from: fromRod,
             to: toRod
         });
+
+        // Print message
+        this.printMessage(`Disk Moved From Rod ${String.fromCharCode('A'.charCodeAt(0) + this.rods.indexOf(fromRod))} to Rod ${String.fromCharCode('A'.charCodeAt(0) + this.rods.indexOf(toRod))}`);
+
+        // Check if puzzle complete
+        this.isPuzzleComplete();
 
         // Update canvas
         this.draw();
@@ -122,6 +132,7 @@ export class TowerOfHanoi {
         }
         const prevMove = this.moveHistory.pop();
         prevMove.from.addDisk(prevMove.to.removeDisk());
+        this.printMessage('Undo previous move');
         this.draw();
     }
 
@@ -147,13 +158,17 @@ export class TowerOfHanoi {
 
     /** Returns true if Tower of Hanoi has been solved, else returns false. */
     isPuzzleComplete() {
-        return this.rods[0].isEmpty() && this.rods[1].isEmpty();
+        const isPuzzleComplete =  this.rods[0].isEmpty() && this.rods[1].isEmpty();
+        if (isPuzzleComplete) {
+            this.printMessage(`Puzzle Completed in ${this.moveHistory.size()} Moves!`);
+        }
+        return isPuzzleComplete;
     }
 
     /** Resets Tower of Hanoi to initial state where all disks are on left rod. */
     reset() {
         // Clear intervals
-        clearInterval(this.solutionInterval); 
+        clearInterval(this.solutionInterval);
 
         // Combine and sort each Stack intance of Disks inside each Rod
         const firstRod = this.rods[0];
@@ -168,6 +183,9 @@ export class TowerOfHanoi {
         }
         // Clear move history
         this.moveHistory.clear();
+
+        // Print message
+        this.printMessage('Puzzle Reset');
 
         // Draw updated canvas
         this.draw();
@@ -202,78 +220,38 @@ export class TowerOfHanoi {
         const getValidMove = function(rodA, rodB) {
             return TowerOfHanoi.isMoveValid(rodA, rodB) ? {from: rodA, to: rodB} : {from: rodB, to: rodA};
         }.bind(this);
-        let moves = [];
         let nextMove;
-        //let interval;
-        if (this.nDisks % 2) { // If odd number of disks
-            this.solutionInterval = setInterval(() => {
-                // Check win condition
-                if (this.isPuzzleComplete()) {
-                    console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
-                    clearInterval(this.solutionInterval);
-                    return;
-                }
+        this.solutionInterval = setInterval(() => {
+            // Check win condition
+            if (this.isPuzzleComplete()) {
+                console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
+                clearInterval(this.solutionInterval);
+                return;
+            }
 
-                switch(this.moveHistory.size() % 3) {
-                    case 0:
-                        // make the legal move between pegs A and C (in either direction)
-                        moves.push(getValidMove(this.rods[0], this.rods[2]));
-                        nextMove = getValidMove(this.rods[0], this.rods[2]);
-                        break;
-                    case 1:
-                        // make the legal move between pegs A and B (in either direction)
-                        moves.push(getValidMove(this.rods[0], this.rods[1]));
-                        nextMove = getValidMove(this.rods[0], this.rods[1]);
-                        break;
-                    case 2:
-                        // make the legal move between pegs B and C (in either direction)
-                        moves.push(getValidMove(this.rods[1], this.rods[2]));
-                        nextMove = getValidMove(this.rods[1], this.rods[2]);
-                        break;
-                    default:
-                        nextMove = null;
-                }
-                if (nextMove)
-                    this.move(nextMove.from, nextMove.to);
+            switch(this.moveHistory.size() % 3) {
+                case 0:
+                    // Odd N Disks: make the legal move between pegs A and C (in either direction)
+                    // Even N Disks: make the legal move between pegs A and B (in either direction)
+                    nextMove = (this.nDisks % 2) ? getValidMove(this.rods[0], this.rods[2]) : getValidMove(this.rods[0], this.rods[1]);
+                    break;
+                case 1:
+                    // Odd N Disks: make the legal move between pegs A and B (in either direction)
+                    // Even N Disks: make the legal move between pegs A and C (in either direction)
+                    nextMove = (this.nDisks % 2) ? getValidMove(this.rods[0], this.rods[1]) : getValidMove(this.rods[0], this.rods[2]);
+                    break;
+                case 2:
+                    // Any N Disks: make the legal move between pegs B and C (in either direction)
+                    nextMove = getValidMove(this.rods[1], this.rods[2]);
+                    break;
+                default:
+                    nextMove = null;
+            }
+            if (nextMove)
+                this.move(nextMove.from, nextMove.to);
 
-                console.log(`Move ${this.moveHistory.size()} complete!`);
-            }, 1000);
-        } else { // Else even number of disks
-            this.solutionInterval = setInterval(() => {
-                // Check win condition
-                if (this.isPuzzleComplete()) {
-                    console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
-                    clearInterval(this.solutionInterval);
-                    return;
-                }
-
-                switch(this.moveHistory.size() % 3) {
-                    case 0:
-                        // make the legal move between pegs A and B (in either direction)
-                        moves.push(getValidMove(this.rods[0], this.rods[1]));
-                        nextMove = getValidMove(this.rods[0], this.rods[1]);
-                        break;
-                    case 1:
-                        // make the legal move between pegs A and C (in either direction)
-                        moves.push(getValidMove(this.rods[0], this.rods[2]));
-                        nextMove = getValidMove(this.rods[0], this.rods[2]);
-                        break;
-                    case 2:
-                        // make the legal move between pegs B and C (in either direction)
-                        moves.push(getValidMove(this.rods[1], this.rods[2]));
-                        nextMove = getValidMove(this.rods[1], this.rods[2]);
-                        break;
-                    default:
-                        nextMove = null;
-                }
-                if (nextMove)
-                    this.move(nextMove.from, nextMove.to);
-
-                console.log(`Move ${this.moveHistory.size()} complete!`);
-            }, 1000);
-        }
-        window.moves = moves;
-        return moves;
+            console.log(`Move ${this.moveHistory.size()} complete!`);
+        }, 1000);
     }
 
     getSolutionIterative() {
@@ -282,6 +260,16 @@ export class TowerOfHanoi {
 
     getSolutionRecursive() {
 
+    }
+
+    /** Prints message to element with id="message-field" */
+    printMessage(message) {
+        // Check type
+        if (typeof message !== 'string') return;
+
+        //this.messageFieldNode.classList.remove('fade-out');
+        this.messageFieldNode.innerHTML = message;
+        //this.messageFieldNode.classList.add('fade-out');
     }
 
     // Static Methods

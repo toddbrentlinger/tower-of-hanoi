@@ -12,6 +12,17 @@ header {
     border: 1px solid black;
 }
 
+#message-field {
+    text-align: center;
+    opacity: 1;
+}
+
+#message-field.fade-out {
+    opacity: 0;
+    transition: opacity 2s;
+    -webkit-transition: opacity 2s; /* Safari */
+}
+
 #buttons-container {
     display: flex;
     flex-flow: column;

@@ -1,8 +1,18 @@
 Tower of Hanoi Notes:
 
+8-18-21
+
+- Add circle with question mark that shows modal of tips when clicked or hovered over.
+
+- Puzzle States:
+	- Complete (puzzle is complete)
+	- Default (disks on first rod)
+	- Playing (intermediate state between initial/default with no moves and puzzle complete)
+	- Solving (puzzle is auto solving and playing entire solution)
+
 8-16-21
 
-- Add message field:
+X Add message field:
 	- Not Valid Move
 	- Puzzle Completed in N Moves!
 	- Disk Moved From Rod N to Rod N
