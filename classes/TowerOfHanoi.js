@@ -1,6 +1,7 @@
 "use strict";
 
 import Rod from "./Rod.js";
+import MoveHistory from "./MoveHistory.js";
 import { StackWithLinkedList as Stack } from "./stack.js";
 import { createElement, nextCharacter } from "./utilities.js";
 
@@ -18,17 +19,16 @@ export class TowerOfHanoi {
     constructor(ctx, nDisks = 4, nRods = 3) {
         this.ctx = ctx; // CanvasRenderingContext2D
         this.nDisks = nDisks;
-        this.moveHistory = new Stack(); // Stack data structure to hold history of moves
         this.rods = TowerOfHanoi.createRodsArray(nDisks, nRods);
         
         this.fromRodInput = 0;
         this.toRodInput = 0;
 
         this.solutionInterval = null;
-        //this.animationInterval = null;
+
+        this.moveHistory = new MoveHistory(document.getElementById('move-history'));
 
         this.messageFieldNode = document.getElementById('message-field');
-        this.moveHistoryNode = document.getElementById('move-history');
 
         // Add buttons
         const buttonContainer = document.getElementById('buttons-container');
@@ -110,7 +110,7 @@ export class TowerOfHanoi {
         toRod.addDisk(fromRod.removeDisk());
 
         // Add move to moveHistory
-        this.moveHistory.push({
+        this.moveHistory.add({
             from: fromRod,
             to: toRod
         });
@@ -127,10 +127,10 @@ export class TowerOfHanoi {
 
     undoMove() {
         // Check if moveHistory is empty
-        if (this.moveHistory.isEmpty()) {
+        if (this.moveHistory.isEmpty) {
             return;
         }
-        const prevMove = this.moveHistory.pop();
+        const prevMove = this.moveHistory.undo();
         prevMove.from.addDisk(prevMove.to.removeDisk());
         this.printMessage('Undo previous move');
         this.draw();
@@ -160,7 +160,7 @@ export class TowerOfHanoi {
     isPuzzleComplete() {
         const isPuzzleComplete =  this.rods[0].isEmpty() && this.rods[1].isEmpty();
         if (isPuzzleComplete) {
-            this.printMessage(`Puzzle Completed in ${this.moveHistory.size()} Moves!`);
+            this.printMessage(`Puzzle Completed in ${this.moveHistory.size} Moves!`);
         }
         return isPuzzleComplete;
     }
@@ -224,12 +224,12 @@ export class TowerOfHanoi {
         this.solutionInterval = setInterval(() => {
             // Check win condition
             if (this.isPuzzleComplete()) {
-                console.log(`Puzzle complete in ${this.moveHistory.size()} moves`);
+                console.log(`Puzzle complete in ${this.moveHistory.size} moves`);
                 clearInterval(this.solutionInterval);
                 return;
             }
 
-            switch(this.moveHistory.size() % 3) {
+            switch(this.moveHistory.size % 3) {
                 case 0:
                     // Odd N Disks: make the legal move between pegs A and C (in either direction)
                     // Even N Disks: make the legal move between pegs A and B (in either direction)
@@ -250,7 +250,7 @@ export class TowerOfHanoi {
             if (nextMove)
                 this.move(nextMove.from, nextMove.to);
 
-            console.log(`Move ${this.moveHistory.size()} complete!`);
+            console.log(`Move ${this.moveHistory.size} complete!`);
         }, 1000);
     }
 
@@ -304,10 +304,10 @@ export class TowerOfHanoi {
 
     static createRodsArray(nDisks, nRods) {
         const rodsArr = new Array(nRods); // Initialize rods to empty array
-        rodsArr[0] = new Rod(nDisks); // Add first rod with all disks
+        rodsArr[0] = new Rod('A', nDisks); // Add first rod with all disks
         // Add remaining empty rods
-        for (let i = 1; i < rodsArr.length; i++) {
-            rodsArr[i] = new Rod();
+        for (let i = 1, c = 'B'; i < rodsArr.length; i++, c = nextCharacter(c)) {
+            rodsArr[i] = new Rod(c);
         }
         return rodsArr;
     }

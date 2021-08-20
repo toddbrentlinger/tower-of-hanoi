@@ -19,7 +19,7 @@ X Add message field:
 	- Undo Prev Move
 	- Puzzle Reset
 
-- Display each move in Move History
+X Display each move in Move History
 	A -> B
 	A -> C
 	B -> C

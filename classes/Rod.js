@@ -3,7 +3,8 @@ import { StackWithLinkedList as Stack } from "./stack.js"
 import Disk from "./Disk.js";
 
 class Rod {
-    constructor(nDisks = 0) {
+    constructor(label, nDisks = 0) {
+        this.label = label;
         this.disks = new Stack();
         for (let i = nDisks; i > 0; i--) {
             this.disks.push(new Disk(i));

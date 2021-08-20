@@ -37,6 +37,10 @@ header {
     margin: 1em 0;
 }
 
+#move-history-container {
+    text-align: center;
+}
+
 #rules-container {
     width: 50%;
     margin: 0 auto;
