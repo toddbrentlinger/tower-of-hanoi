@@ -24,7 +24,7 @@ X Display each move in Move History
 	A -> C
 	B -> C
 
-- Add input for the number of disks to use
+X Add input for the number of disks to use
 
 8-12-21
 

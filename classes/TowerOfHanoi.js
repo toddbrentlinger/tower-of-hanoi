@@ -30,6 +30,28 @@ export class TowerOfHanoi {
 
         this.messageFieldNode = document.getElementById('message-field');
 
+        // Add event listeners to inputs in input container
+        document.getElementById('nDisks').addEventListener('change', function(event) {
+            console.log('input has changed');
+            let value = event.target.value;
+            // On browsers that don't support inputs of type number, a number input falls back to type text.
+            // If value type if string, convert to number
+            if (typeof value == 'string') {
+                value = Number.parseInt(value, 10);
+                // Return if converted value is not a number
+                if (isNaN(value)) return;
+            }
+
+            // Assign new nDisks
+            this.nDisks = value;
+
+            // Assign new rods
+            this.rods = TowerOfHanoi.createRodsArray(this.nDisks, this.nRods);
+
+            // Reset puzzle
+            this.reset();
+        }.bind(this));
+
         // Add buttons
         const buttonContainer = document.getElementById('buttons-container');
         let temp = new Array(this.rods.length);
