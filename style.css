@@ -37,6 +37,25 @@ header {
     margin: 1em 0;
 }
 
+#solve-container {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#solve-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#solve-body {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#solve-body > button {
+    width: 50%;
+}
+
 #move-history-container {
     text-align: center;
 }

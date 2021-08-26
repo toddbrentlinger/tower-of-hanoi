@@ -6,6 +6,8 @@
         <meta name="description" content="">
         <title>Tower of Hanoi</title>
         <link href="./style.css" rel="stylesheet">
+        <script defer src="/node_modules/@fortawesome/fontawesome-free/js/solid.js"></script>
+        <script defer src="/node_modules/@fortawesome/fontawesome-free/js/fontawesome.js"></script>
     </head>
     <body>
         <nav id="topnav"></nav>
@@ -19,7 +21,18 @@
         </div>
         <div id="message-field"></div>
         <div id="buttons-container"></div>
-        <div id="solve-container"></div>
+        <div id="solve-container">
+            <div id="solve-header">
+                <div id="solve-header-label">Solve</div>
+                <i class="fas fa-chevron-up"></i>
+            </div>
+            <div id="solve-body">
+                <button type="button"><i class="fas fa-play"></i>PLAY</button>
+                <button type="button"><i class="fas fa-stop"></i>STOP</button>
+                <button type="button"><i class="fas fa-backward"></i>PREV</button>
+                <button type="button"><i class="fas fa-forward"></i>NEXT</button>
+            </div>
+        </div>
         <div id="move-history-container">
             <h3>Move History</h3>
             <div id="move-history"></div>

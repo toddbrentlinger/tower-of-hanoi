@@ -98,6 +98,13 @@ export class TowerOfHanoi {
             this.reset();
         }.bind(this));
 
+        // Solve Container
+        document.getElementById('solve-header').addEventListener('click', function() {
+            this.style.maxHeight = this.style.maxHeight ? null : undefined;
+        });
+
+        // Solve Container - Play
+
         // Handle canvas click event
         function handleCanvasClick(event) {
             console.log('canvas clicked!');
