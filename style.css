@@ -37,24 +37,40 @@ header {
     margin: 1em 0;
 }
 
-#solve-container {
-    width: 50%;
-    margin: 0 auto;
-}
+/* Accordion */
 
-#solve-header {
-    display: flex;
-    justify-content: space-between;
+.accordion {
     cursor: pointer;
     transition: 0.4s;
+}
+
+.accordion+* {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+}
+
+/* Solve Dropdown */
+
+#solve-container, #move-history-container {
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid black;
+}
+
+#solve-header, #move-history-header {
+    display: flex;
+    justify-content: space-between;
+    /*cursor: pointer;
+    transition: 0.4s;*/
 }
 
 #solve-body {
     display: flex;
     flex-wrap: wrap;
-    overflow: hidden;
+    /*overflow: hidden;
     max-height: 0;
-    transition: max-height 0.2s ease-out;
+    transition: max-height 0.2s ease-out;*/
 }
 
 #solve-body > button {

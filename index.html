@@ -22,11 +22,11 @@
         <div id="message-field"></div>
         <div id="buttons-container"></div>
         <div id="solve-container">
-            <div id="solve-header">
-                <div id="solve-header-label">Solve</div>
+            <div id="solve-header" class="accordion">
+                <h3 id="solve-header-label">Solve</h3>
                 <i class="fas fa-chevron-down"></i>
             </div>
-            <div id="solve-body">
+            <div id="solve-body" class="accordion-panel">
                 <button type="button"><i class="fas fa-play"></i>PLAY</button>
                 <button type="button"><i class="fas fa-stop"></i>STOP</button>
                 <button type="button"><i class="fas fa-backward"></i>PREV</button>
@@ -34,8 +34,11 @@
             </div>
         </div>
         <div id="move-history-container">
-            <h3>Move History</h3>
-            <div id="move-history"></div>
+            <div id="move-history-header" class="accordion">
+                <h3>Move History</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div id="move-history" class="accordion-panel"></div>
         </div>
         <div id="rules-container">
             <p>The objective of the puzzle is to move the entire stack to the last rod, obeying the following simple rules:</p>

@@ -99,21 +99,39 @@ export class TowerOfHanoi {
             this.reset();
         }.bind(this));
 
-        // Solve Container
-        document.getElementById('solve-header').addEventListener('click', function() {
-            this.nextElementSibling.style.maxHeight = this.nextElementSibling.style.maxHeight 
-                ? null 
-                : this.nextElementSibling.scrollHeight + "px";
-            this.classList.toggle('active');
-            const faIcon = this.querySelector('svg');
-            if (this.classList.contains('active')) {
-                faIcon.classList.remove('fa-chevron-down');
-                faIcon.classList.add('fa-chevron-up');
-            } else {
-                faIcon.classList.remove('fa-chevron-up');
-                faIcon.classList.add('fa-chevron-down');
-            }
+        // Accordion
+        document.querySelectorAll('.accordion').forEach(accordion => {
+            accordion.addEventListener('click', function() {
+                this.nextElementSibling.style.maxHeight = this.nextElementSibling.style.maxHeight 
+                    ? null 
+                    : this.nextElementSibling.scrollHeight + "px";
+                this.classList.toggle('active');
+                const faIcon = this.querySelector('svg');
+                if (this.classList.contains('active')) {
+                    faIcon.classList.remove('fa-chevron-down');
+                    faIcon.classList.add('fa-chevron-up');
+                } else {
+                    faIcon.classList.remove('fa-chevron-up');
+                    faIcon.classList.add('fa-chevron-down');
+                }
+            });
         });
+
+        // Solve Container
+        // document.getElementById('solve-header').addEventListener('click', function() {
+        //     this.nextElementSibling.style.maxHeight = this.nextElementSibling.style.maxHeight 
+        //         ? null 
+        //         : this.nextElementSibling.scrollHeight + "px";
+        //     this.classList.toggle('active');
+        //     const faIcon = this.querySelector('svg');
+        //     if (this.classList.contains('active')) {
+        //         faIcon.classList.remove('fa-chevron-down');
+        //         faIcon.classList.add('fa-chevron-up');
+        //     } else {
+        //         faIcon.classList.remove('fa-chevron-up');
+        //         faIcon.classList.add('fa-chevron-down');
+        //     }
+        // });
 
         // Solve Container - Play
 
