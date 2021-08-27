@@ -29,6 +29,7 @@ export class TowerOfHanoi {
         this.moveHistory = new MoveHistory(document.getElementById('move-history'));
 
         this.messageFieldNode = document.getElementById('message-field');
+        this.solveBodyNode = document.getElementById('solve-body');
 
         // Add event listeners to inputs in input container
         document.getElementById('nDisks').addEventListener('change', function(event) {
@@ -100,7 +101,18 @@ export class TowerOfHanoi {
 
         // Solve Container
         document.getElementById('solve-header').addEventListener('click', function() {
-            this.style.maxHeight = this.style.maxHeight ? null : undefined;
+            this.nextElementSibling.style.maxHeight = this.nextElementSibling.style.maxHeight 
+                ? null 
+                : this.nextElementSibling.scrollHeight + "px";
+            this.classList.toggle('active');
+            const faIcon = this.querySelector('svg');
+            if (this.classList.contains('active')) {
+                faIcon.classList.remove('fa-chevron-down');
+                faIcon.classList.add('fa-chevron-up');
+            } else {
+                faIcon.classList.remove('fa-chevron-up');
+                faIcon.classList.add('fa-chevron-down');
+            }
         });
 
         // Solve Container - Play

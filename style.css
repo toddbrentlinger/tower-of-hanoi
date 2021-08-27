@@ -45,11 +45,16 @@ header {
 #solve-header {
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
+    transition: 0.4s;
 }
 
 #solve-body {
     display: flex;
     flex-wrap: wrap;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
 }
 
 #solve-body > button {
