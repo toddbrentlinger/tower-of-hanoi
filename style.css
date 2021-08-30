@@ -65,6 +65,17 @@ header {
     transition: 0.4s;*/
 }
 
+#solve-header h3, #move-history-header h3 {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#solve-header svg, #move-history-header svg {
+    align-self: center;
+    padding-right: 0.3em;
+}
+
 #solve-body {
     display: flex;
     flex-wrap: wrap;
@@ -79,6 +90,10 @@ header {
 
 #move-history-container {
     text-align: center;
+}
+
+#move-history svg {
+    padding: 0 0.3em;
 }
 
 #rules-container {

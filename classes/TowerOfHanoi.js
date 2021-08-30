@@ -118,22 +118,26 @@ export class TowerOfHanoi {
         });
 
         // Solve Container
-        // document.getElementById('solve-header').addEventListener('click', function() {
-        //     this.nextElementSibling.style.maxHeight = this.nextElementSibling.style.maxHeight 
-        //         ? null 
-        //         : this.nextElementSibling.scrollHeight + "px";
-        //     this.classList.toggle('active');
-        //     const faIcon = this.querySelector('svg');
-        //     if (this.classList.contains('active')) {
-        //         faIcon.classList.remove('fa-chevron-down');
-        //         faIcon.classList.add('fa-chevron-up');
-        //     } else {
-        //         faIcon.classList.remove('fa-chevron-up');
-        //         faIcon.classList.add('fa-chevron-down');
-        //     }
-        // });
 
         // Solve Container - Play
+        document.getElementById('solve-play-btn').addEventListener('click', function() {
+            this.solve();
+        }.bind(this));
+
+        // Solve Container - Stop
+        document.getElementById('solve-stop-btn').addEventListener('click', function() {
+            this.autoSolveStop();
+        }.bind(this));
+
+        // Solve Container - Prev
+        document.getElementById('solve-prev-btn').addEventListener('click', function() {
+            this.undoMove();
+        }.bind(this));
+
+        // Solve Container - Next
+        document.getElementById('solve-next-btn').addEventListener('click', function() {
+            this.solutionSimpleNextMove();
+        }.bind(this));
 
         // Handle canvas click event
         function handleCanvasClick(event) {
@@ -258,6 +262,14 @@ export class TowerOfHanoi {
         this.getSolutionSimple();
     }
 
+    autoSolveStop() {
+        // Clear intervals
+        clearInterval(this.solutionInterval);
+
+        // Print message
+        this.printMessage('Auto Solution Stopped');
+    }
+
     getSolutionSimple() {
         /*
         For an even number of disks:
@@ -276,10 +288,6 @@ export class TowerOfHanoi {
 
         In each case, a total of 2n − 1 moves are made.
          */
-        const getValidMove = function(rodA, rodB) {
-            return TowerOfHanoi.isMoveValid(rodA, rodB) ? {from: rodA, to: rodB} : {from: rodB, to: rodA};
-        }.bind(this);
-        let nextMove;
         this.solutionInterval = setInterval(() => {
             // Check win condition
             if (this.isPuzzleComplete()) {
@@ -288,29 +296,39 @@ export class TowerOfHanoi {
                 return;
             }
 
-            switch(this.moveHistory.size % 3) {
-                case 0:
-                    // Odd N Disks: make the legal move between pegs A and C (in either direction)
-                    // Even N Disks: make the legal move between pegs A and B (in either direction)
-                    nextMove = (this.nDisks % 2) ? getValidMove(this.rods[0], this.rods[2]) : getValidMove(this.rods[0], this.rods[1]);
-                    break;
-                case 1:
-                    // Odd N Disks: make the legal move between pegs A and B (in either direction)
-                    // Even N Disks: make the legal move between pegs A and C (in either direction)
-                    nextMove = (this.nDisks % 2) ? getValidMove(this.rods[0], this.rods[1]) : getValidMove(this.rods[0], this.rods[2]);
-                    break;
-                case 2:
-                    // Any N Disks: make the legal move between pegs B and C (in either direction)
-                    nextMove = getValidMove(this.rods[1], this.rods[2]);
-                    break;
-                default:
-                    nextMove = null;
-            }
-            if (nextMove)
-                this.move(nextMove.from, nextMove.to);
-
-            console.log(`Move ${this.moveHistory.size} complete!`);
+            // Make next move
+            this.solutionSimpleNextMove();
         }, 1000);
+    }
+
+    solutionSimpleNextMove() {
+        let nextMove;
+        const getValidMove = function(rodA, rodB) {
+            return TowerOfHanoi.isMoveValid(rodA, rodB) ? {from: rodA, to: rodB} : {from: rodB, to: rodA};
+        }.bind(this);
+
+        switch(this.moveHistory.size % 3) {
+            case 0:
+                // Odd N Disks: make the legal move between pegs A and C (in either direction)
+                // Even N Disks: make the legal move between pegs A and B (in either direction)
+                nextMove = (this.nDisks % 2) ? getValidMove(this.rods[0], this.rods[2]) : getValidMove(this.rods[0], this.rods[1]);
+                break;
+            case 1:
+                // Odd N Disks: make the legal move between pegs A and B (in either direction)
+                // Even N Disks: make the legal move between pegs A and C (in either direction)
+                nextMove = (this.nDisks % 2) ? getValidMove(this.rods[0], this.rods[1]) : getValidMove(this.rods[0], this.rods[2]);
+                break;
+            case 2:
+                // Any N Disks: make the legal move between pegs B and C (in either direction)
+                nextMove = getValidMove(this.rods[1], this.rods[2]);
+                break;
+            default:
+                nextMove = null;
+        }
+        if (nextMove)
+            this.move(nextMove.from, nextMove.to);
+
+        console.log(`Move ${this.moveHistory.size} complete!`);
     }
 
     getSolutionIterative() {

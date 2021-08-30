@@ -60,8 +60,12 @@ class MoveHistory {
     // Static Methods
 
     static createMoveElement(move) {
-        let moveElement = document.createElement('div');
-        moveElement.innerHTML = `${move.from.label} -> ${move.to.label}`;
+        const iconElement = document.createElement('i');
+        iconElement.classList.add('fas', 'fa-arrow-right');
+        const moveElement = document.createElement('div');
+        moveElement.innerHTML = move.from.label;
+        moveElement.append(iconElement);
+        moveElement.innerHTML += move.to.label;
         return moveElement;
     }
 }

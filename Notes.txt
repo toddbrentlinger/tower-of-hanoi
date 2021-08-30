@@ -1,12 +1,28 @@
 Tower of Hanoi Notes:
 
+8-30-21
+
+- ISSUE: Move History does not expand when already open and new items are added.
+SOLUTION: Set max-height of element whenever new item is added. Logic is already used
+when accordion is toggled open/close.
+
+- ISSUE: Once auto solution has started and stopped. Clicking 'play' again resets the puzzle because
+user moves are not accounted for when auto solving so it needs to be reset in case the user made their own
+moves. Button for 'Play' should be changed to 'Reset'.
+SOLUTION: Use state for puzzle that tracks whether the solution is in a state where auto solve can continue
+OR in a state where the user is making moves and auto solve needs to reset the puzzle before beginning.
+
+- Add option to solve dropdown to change delay between moves.
+SOLUTION: When value is changed, current interval must be cleared before a new interval is started with new
+delay.
+
 8-18-21
 
 - Add circle with question mark that shows modal of tips when clicked or hovered over.
 
 - Puzzle States:
 	- Complete (puzzle is complete)
-	- Default (disks on first rod)
+	- Default/Initial (disks on first rod)
 	- Playing (intermediate state between initial/default with no moves and puzzle complete)
 	- Solving (puzzle is auto solving and playing entire solution)
 
@@ -28,7 +44,7 @@ X Add input for the number of disks to use
 
 8-12-21
 
-- Add Solve dropdown with options to change delay between moves, 'Solve' button or 'Play', 'Stop' button (clears interval when clicked), 
+X Add Solve dropdown with options to change delay between moves, 'Solve' button or 'Play', 'Stop' button (clears interval when clicked), 
 ability to step through solution move by move instead of playing automatically.
 
 X Style radio buttons and label to be horizontal instead of vertical.
