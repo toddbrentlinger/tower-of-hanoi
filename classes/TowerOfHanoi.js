@@ -99,6 +99,23 @@ export class TowerOfHanoi {
             this.reset();
         }.bind(this));
 
+        // Tips Modal
+        const tipsModal = document.querySelector('#hint-modal-container .modal');
+        // When user clicks the button, open the modal
+        document.querySelector('#hint-modal-container .modal-btn').addEventListener('click', function() {
+            tipsModal.style.display = 'block';
+        });
+        // When the user clicks on <span> (x), close the modal
+        document.querySelector('.modal .close').addEventListener('click', function() {
+            tipsModal.style.display = 'none';
+        });
+        // When the user clicks anywhere outside the modal, close it
+        window.addEventListener('click', function(event) {
+           if (event.target == tipsModal) {
+               tipsModal.style.display = 'none';
+           } 
+        });
+
         // Accordion
         document.querySelectorAll('.accordion').forEach(accordion => {
             accordion.addEventListener('click', function() {
