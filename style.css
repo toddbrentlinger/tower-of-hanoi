@@ -15,6 +15,7 @@ header {
 #message-field {
     text-align: center;
     opacity: 1;
+    height: 1em;
 }
 
 #message-field.fade-out {
@@ -23,7 +24,7 @@ header {
     -webkit-transition: opacity 2s; /* Safari */
 }
 
-#buttons-container {
+#move-select-container {
     display: flex;
     flex-flow: column;
     align-items: center;
@@ -35,6 +36,17 @@ header {
 
 .rod-move-select > * {
     margin: 1em 0;
+}
+
+#buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#hint-modal-container {
+    display: inline-block;
+    order: 1;
 }
 
 /* Hint Modal */
@@ -58,7 +70,7 @@ header {
     background-color: #fefefe;
     margin: auto;
     padding: 0;
-    border: 1px solid #888;
+    /*border: 1px solid #888;*/
     width: 80%;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animateModal;
@@ -84,11 +96,28 @@ header {
     font-weight: bold;
 }
 
+/* Float clearfix */
+.modal-header::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
 .modal-header .close:hover,
 .modal-header .close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+.modal-header, .modal-footer {
+    padding: 2px 16px;
+    background-color: #888;
+    color: white;
+}
+
+.modal-body { 
+    padding: 2px 16px; 
 }
 
 #hint-modal-container .modal-btn {

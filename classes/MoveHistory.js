@@ -55,6 +55,11 @@ class MoveHistory {
             this.moveHistoryNode.append(MoveHistory.createMoveElement(tempNode.data));
             tempNode = tempNode.next;
         }
+
+        // Resize container element if open
+        if (this.moveHistoryNode.style.maxHeight) {
+            this.moveHistoryNode.style.maxHeight = this.moveHistoryNode.scrollHeight + 'px';
+        }
     }
 
     // Static Methods

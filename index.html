@@ -20,33 +20,35 @@
             <canvas id="canvas-hanoi"></canvas>
         </div>
         <div id="message-field"></div>
-        <div id="buttons-container"></div>
-        <div id="hint-modal-container">
-            <button class="modal-btn" type="button">?</button>
-            <div class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span class="close">&times;</span>
+        <div id="move-select-container"></div>
+        <div id="buttons-container">
+            <div id="hint-modal-container">
+                <button class="modal-btn" type="button">?</button>
+                <div class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <h4>Simple Statement of Iterative Solution</h4>
+                            <p>For an even number of disks:</p>
+                            <ul>
+                                <li>make the legal move between pegs A and B (in either direction),</li>
+                                <li>make the legal move between pegs A and C (in either direction),</li>
+                                <li>make the legal move between pegs B and C (in either direction),</li>
+                                <li>repeat until complete.</li>
+                            </ul>
+                            <p>For an odd number of disks:</p>
+                            <ul>
+                                <li>make the legal move between pegs A and C (in either direction),</li>
+                                <li>make the legal move between pegs A and B (in either direction),</li>                        </li>
+                                <li>make the legal move between pegs B and C (in either direction),</li>
+                                <li>repeat until complete.</li>
+                            </ul>
+                            <p>In each case, a total of 2<sup>n</sup> − 1 moves are made.</p>
+                        </div>
+                        <div class="modal-footer"></div>
                     </div>
-                    <div class="modal-body">
-                        <h4>Simple Statement of Iterative Solution</h4>
-                        <p>For an even number of disks:</p>
-                        <ul>
-                            <li>make the legal move between pegs A and B (in either direction),</li>
-                            <li>make the legal move between pegs A and C (in either direction),</li>
-                            <li>make the legal move between pegs B and C (in either direction),</li>
-                            <li>repeat until complete.</li>
-                        </ul>
-                        <p>For an odd number of disks:</p>
-                        <ul>
-                            <li>make the legal move between pegs A and C (in either direction),</li>
-                            <li>make the legal move between pegs A and B (in either direction),</li>                        </li>
-                            <li>make the legal move between pegs B and C (in either direction),</li>
-                            <li>repeat until complete.</li>
-                        </ul>
-                        <p>In each case, a total of 2<sup>n</sup> − 1 moves are made.</p>
-                    </div>
-                    <div class="modal-footer"></div>
                 </div>
             </div>
         </div>

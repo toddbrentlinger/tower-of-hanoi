@@ -53,27 +53,28 @@ export class TowerOfHanoi {
             this.reset();
         }.bind(this));
 
-        // Add buttons
-        const buttonContainer = document.getElementById('buttons-container');
+        // Move Select Buttons
+        const moveSelectContainer = document.getElementById('move-select-container');
         let temp = new Array(this.rods.length);
         for (let i = 0, c = 'A'; i < temp.length; i++, c = nextCharacter(c)) temp[i] = {value: i, text: c};
         
-        // Move - From
+        // Move Select Buttons - From
         function handleFromInputChange(event) {
             if (this.fromRodInput !== event.target.value)
                 this.fromRodInput = Number.parseInt(event.target.value, 10);
         }
-        buttonContainer.append(TowerOfHanoi.createInputField('From Rod: ', 'moveFrom', temp, handleFromInputChange.bind(this), 'rod-move-select'));
+        moveSelectContainer.append(TowerOfHanoi.createInputField('From Rod: ', 'moveFrom', temp, handleFromInputChange.bind(this), 'rod-move-select'));
         
-        // Move - To
+        // Move Select Buttons - To
         function handleToInputChange(event) {
             if (this.toRodInput !== event.target.value)
                 this.toRodInput = Number.parseInt(event.target.value, 10);
         }
-        buttonContainer.append(TowerOfHanoi.createInputField('To Rod: ', 'moveTo', temp, handleToInputChange.bind(this), 'rod-move-select'));
+        moveSelectContainer.append(TowerOfHanoi.createInputField('To Rod: ', 'moveTo', temp, handleToInputChange.bind(this), 'rod-move-select'));
 
         // Button Container
-        temp = buttonContainer.appendChild(createElement('div', 'btn-container'));
+        //temp = buttonContainer.appendChild(createElement('div', 'btn-container'));
+        temp = document.getElementById('buttons-container');
 
         // Move Button
         temp = temp.appendChild(createElement('button', undefined, 'Move'));
@@ -88,10 +89,10 @@ export class TowerOfHanoi {
         }.bind(this));
 
         // Solve Button
-        temp = temp.parentElement.appendChild(createElement('button', undefined, 'Solve'));
-        temp.addEventListener('click', function() {
-            this.solve();
-        }.bind(this));
+        // temp = temp.parentElement.appendChild(createElement('button', undefined, 'Solve'));
+        // temp.addEventListener('click', function() {
+        //     this.solve();
+        // }.bind(this));
 
         // Reset Button
         temp = temp.parentElement.appendChild(createElement('button', undefined, 'Reset'));

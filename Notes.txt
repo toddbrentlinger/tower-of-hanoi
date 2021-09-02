@@ -2,7 +2,7 @@ Tower of Hanoi Notes:
 
 8-30-21
 
-- ISSUE: Move History does not expand when already open and new items are added.
+X ISSUE: Move History does not expand when already open and new items are added.
 SOLUTION: Set max-height of element whenever new item is added. Logic is already used
 when accordion is toggled open/close.
 
@@ -18,7 +18,7 @@ delay.
 
 8-18-21
 
-- Add circle with question mark that shows modal of tips when clicked or hovered over.
+X Add circle with question mark that shows modal of tips when clicked or hovered over.
 
 - Puzzle States:
 	- Complete (puzzle is complete)
