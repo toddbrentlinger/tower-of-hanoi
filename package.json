@@ -1,0 +1,27 @@
+{
+  "name": "tower-of-hanoi",
+  "version": "1.0.0",
+  "description": "Tower of Hanoi puzzle",
+  "main": "main.js",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toddbrentlinger/tower-of-hanoi.git"
+  },
+  "keywords": [
+    "tower",
+    "hanoi"
+  ],
+  "author": "Todd Brentlinger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toddbrentlinger/tower-of-hanoi/issues"
+  },
+  "homepage": "https://github.com/toddbrentlinger/tower-of-hanoi#readme"
+}
